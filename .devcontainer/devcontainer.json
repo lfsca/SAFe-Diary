@@ -12,7 +12,7 @@
   "customizations": {
     "codespaces": {
       "openFiles": [
-        "hello_world/templates/index.html"
+        "safeproj/templates/index.html"
       ]
     },
     "vscode": {
