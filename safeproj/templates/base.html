@@ -9,22 +9,53 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
+{% block head %}{% endblock %}
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
-      <a class="navbar-brand" href="#">SAFe Framework</a>
-    </div>
-  </nav>
+  <!-- Botão para abrir sidebar -->
+  <button class="sidebar-toggle" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+    &gt;
+  </button>
 
-  <div class="container">
+  <!-- Sidebar -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+    <div class="offcanvas-header justify-content-between align-items-center">
+      <div>
+        <h5 class="offcanvas-title" id="sidebarLabel">SAFe Framework</h5>
+        {% if request.user.is_authenticated %}
+          <p class="text-muted small mt-1">Olá, {{ request.user.first_name|default:request.user.username }}!</p>
+        {% endif %}
+      </div>
+      <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Fechar sidebar">
+        &lt;
+      </button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column gap-2">
+      <a href="#">Início</a>
+      <a href="#">Sobre</a>
+      <a href="#">Módulos</a>
+      <a href="#">Contato</a>
+      <hr>
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Registrar</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="container mt-4">
     {% block content %}{% endblock %}
   </div>
 
+  <!-- Rodapé -->
   <footer class="text-center mt-5 mb-3 text-muted">
     &copy; 2025 - SAFe Learning Hub
   </footer>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{% static 'js/scripts.js' %}"></script>
 </body>

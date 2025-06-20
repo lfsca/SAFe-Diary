@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mapa Interativo | SAFe{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/mapa.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="mapa-container">
+  <img src="{% static 'img/safe2.png' %}" alt="Mapa Interativo" class="mapa-img">
+
+  <!-- Áreas clicáveis (exemplo com 3) -->
+  <div class="hotspot" style="top: 15%; left: 34%;" data-title="Scrum Master" data-content="Responsável por remover impedimentos e facilitar as cerimônias ágeis."></div>
+  <div class="hotspot" style="top: 15%; left: 42%;" data-title="Product Owner" data-content="Garante que o backlog esteja alinhado com os objetivos do negócio."></div>
+  <div class="hotspot" style="top: 15%; left: 50%;" data-title="RTE" data-content="Facilitador do ART, responsável pela entrega contínua em escala."></div>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <span id="modal-close">&times;</span>
+    <h2 id="modal-title"></h2>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="{% static 'js/mapa.js' %}"></script>
+{% endblock %}

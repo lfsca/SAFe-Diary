@@ -1,0 +1,96 @@
+
+
+body {
+  background-color: #f9f9fb;
+  color: #212529;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+h1, h2, h5 {
+  color: white;
+}
+
+.bg-white {
+  background-color: white !important;
+}
+
+.card-title {
+  color: #333;
+}
+
+.card-body {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.card-body:hover {
+  background-color: #f8f9fa;
+}
+
+.shadow-sm {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+
+ul li {
+  list-style-type: disc;
+  color: #333;
+}
+
+.img-fluid {
+  border: 4px solid white;
+  border-radius: 8px;
+}
+
+.hero-section {
+  background: linear-gradient(to right, #134e5e, #71b280);
+  color: white;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.section-content {
+  background-color: #f8f9fa;
+  padding: 2rem 1rem;
+}
+
+.card-translucent {
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px); /* suporte Safari */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.card-bordered {
+  border-left: 6px solid #71b280; /* roxo elegante */
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.card-bordered h5 {
+  color: #71b280;
+  font-weight: 600;
+}
+
+.collapse .card-body {
+  background: linear-gradient(to right, #134e5e, #71b280);
+  color: white;
+  border-top: none !important; /* remove a borda se quiser */
+  transition: background 0.3s ease;
+}
