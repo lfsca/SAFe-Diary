@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from .models import SAFeChallanges
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(label="Senha", widget=forms.PasswordInput)
@@ -17,3 +18,17 @@ class RegisterForm(forms.ModelForm):
 
         if password and confirm_password and password != confirm_password:
             raise ValidationError("As senhas não coincidem.")
+
+class SAFeChallangesForm(forms.ModelForm):
+    class Meta:
+        model = SAFeChallanges
+        fields = ['title', 'description']
+        widgets = {
+            'title': forms.Select(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
+        labels = {
+            'title': 'Type of Challange',
+            'description': 'Detailed Description',
+        }
+

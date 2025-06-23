@@ -30,3 +30,15 @@ body {
 .text-danger {
     font-size: 0.875rem;
 }
+
+.btn-register {
+  background-color: #134e5e;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+.btn-register:hover {
+  background-color: #134e5e;
+}
