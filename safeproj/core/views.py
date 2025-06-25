@@ -77,8 +77,6 @@ def register_ocurrence(request):
         'form': form,
         'challenge': challenge
     })
-    
-    
 
 def nlp_redirect(request):
     best_match = None

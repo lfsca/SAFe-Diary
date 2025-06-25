@@ -14,14 +14,6 @@ section {
   margin-bottom: 2rem;
 }
 
-/* Hero */
-.hero-section {
-  background: linear-gradient(to right, #134e5e, #71b280);
-  color: white;
-  padding: 3rem 1rem;
-  text-align: center;
-}
-
 h1, h2, h5 {
   color: white;
 }
