@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Descubra seu Desafio | SAFe{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4 text-center">Qual o seu desafio?</h2>
+
+  <form method="POST" class="mb-5">
+    {% csrf_token %}
+    <textarea name="description" class="form-control mb-3" rows="5" placeholder="Descreva seu problema com o SAFe...">{{ user_input }}</textarea>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">Get Solutions To Your Problem</button>
+    </div>
+  </form>
+
+  {% if best_match %}
+    <div class="card shadow-sm p-4 mx-auto" style="max-width: 85%;">
+      <h5 class="mb-2" style="color: #134e5e;">Desafio encontrado: {{ best_match.get_title_display }}</h5>
+      <p>{{ best_match.description }}</p>
+
+      <div class="card mt-3">
+        <div class="card-body">
+          <h6 class="card-title" style="color: #134e5e;">Soluções propostas</h6>
+          {% if solutions %}
+            {% for sol in solutions %}
+              <div class="mb-3">
+                <p class="mb-0"><strong>{{ sol.author.username }}</strong>:</p>
+                <p>{{ sol.description }}</p>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted fst-italic">Nenhuma solução registrada.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

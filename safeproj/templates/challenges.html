@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load dict_extras %}
 
 {% block title %}Challenges do SAFe{% endblock %}
 
@@ -39,9 +40,10 @@
 
           <div class="card mt-3">
             <div class="card-body">
-              <h6 class="card-title" style="color: #134e5e;">Soluções propostas</h6>
-              {% if solutions_by_challenge %}
-                {% for sol in solutions_by_challenge %}
+            <h6 class="card-title" style="color: #134e5e;">Solution Proposals</h6>
+            {% with solutions=solutions_by_challenge|get_item:challenge.id %}
+              {% if solutions %}
+                {% for sol in solutions %}
                   <div class="mb-2">
                     <p class="mb-0"><strong>{{ sol.author.username }}</strong>:</p>
                     <p>{{ sol.description }}</p>
@@ -50,6 +52,7 @@
               {% else %}
                 <p class="text-muted fst-italic">Nenhuma solução registrada.</p>
               {% endif %}
+            {% endwith %}
             </div>
           </div>
         </div>
@@ -61,25 +64,27 @@
       {% for challenge in challenges %}
         <div id="group-{{ challenge.id }}" class="hide card shadow-sm p-4 mb-4" style="max-width: 85%; margin-left: auto; margin-right: auto;">
           <h6 class="card-title" style="color: #134e5e;">Ocorrências</h6>
-          {% if ocurrences_by_challenge %}
-            {% for oc in ocurrences_by_challenge %}
-              <div class="card mb-3 p-3 border-start border-4 border-success">
-                <h6><strong>Usuário:</strong> {{ oc.user.username }}</h6>
-                <p><strong>Data:</strong> {{ oc.occurred_at|date:"d/m/Y" }}</p>
-                {% if oc.notes %}
-                  <p>{{ oc.notes }}</p>
-                {% else %}
-                  <p class="text-muted fst-italic">Sem descrição.</p>
-                {% endif %}
-              </div>
-            {% endfor %}
-          {% else %}
-            <p class="text-muted fst-italic">Nenhuma ocorrência registrada para este challenge.</p>
-          {% endif %}
+            {% with ocurrences=ocurrences_by_challenge|get_item:challenge.id %}
+              {% if ocurrences %}
+                {% for oc in ocurrences %}
+                  <div class="card mb-3 p-3 border-start border-4 border-success">
+                    <h6><strong>Usuário:</strong> {{ oc.user.username }}</h6>
+                    <p><strong>Data:</strong> {{ oc.occurred_at|date:"d/m/Y" }}</p>
+                    {% if oc.notes %}
+                      <p>{{ oc.notes }}</p>
+                    {% else %}
+                      <p class="text-muted fst-italic">Sem descrição.</p>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p class="text-muted fst-italic">Nenhuma ocorrência registrada para este challenge.</p>
+              {% endif %}
+            {% endwith %}
         </div>
       {% endfor %}
-      <div class="text-center mt-4">
-        <a id="btn-registrar" href="#" class="btn btn-success disabled">
+      <div id="registrar-container" class="text-center mt-4 d-none">
+        <a id="btn-registrar" href="#" class="btn btn-success">
           + Registrar Ocorrência
         </a>
       </div>
