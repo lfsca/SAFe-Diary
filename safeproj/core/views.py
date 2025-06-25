@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import RegisterForm, SAFeChallangesForm
 
-# Create your views here.
+from core.models import SAFeChallanges
+from .forms import RegisterForm, SAFeChallangesForm
 
 def home(request):
     return render(request, "core/home.html")
@@ -16,7 +16,7 @@ def register(request):
             user.set_password(form.cleaned_data["password"])
             user.save()
             messages.success(request, "Conta criada com sucesso!")
-            return redirect("login")  # ou onde preferir
+            return redirect("login")
     else:
         form = RegisterForm()
     return render(request, "registration/register.html", {"form": form})
@@ -32,10 +32,18 @@ def registrar_desafio(request):
         form = SAFeChallangesForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('desafio_sucesso')
+            return redirect('registrar_desafio')
     else:
         form = SAFeChallangesForm()
     return render(request, 'registrar_desafio.html', {'form': form})
 
-def desafio_sucesso(request):
-    return render(request, 'desafio_sucesso.html')
+def desafios_view(request):
+    challenges = SAFeChallanges.objects.all().order_by('title')
+    ocurrences_by_challenge = {
+        challenge.id: challenge.ocurrences.select_related('user').all()
+        for challenge in challenges
+    }
+    return render(request, 'desafios.html', {
+        'challenges': challenges,
+        'ocurrences_by_challenge': ocurrences_by_challenge,
+    })

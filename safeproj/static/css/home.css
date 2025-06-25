@@ -1,5 +1,4 @@
-
-
+/* Layout básico */
 body {
   background-color: #f9f9fb;
   color: #212529;
@@ -15,15 +14,75 @@ section {
   margin-bottom: 2rem;
 }
 
+/* Hero */
+.hero-section {
+  background: linear-gradient(to right, #134e5e, #71b280);
+  color: white;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
 h1, h2, h5 {
   color: white;
 }
 
-.bg-white {
-  background-color: white !important;
+.nav-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) 2fr; /* 4 botões padrão + 1 mais longo */
+  margin: 2rem auto;
+  max-width: 1000px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-.card-title {
+.nav-bar a {
+  background-color: #71b280;
+  color: white;
+  padding: 1rem 0;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border-right: 1px solid #f9f9fb;
+}
+
+.nav-bar a:last-child {
+  border-right: none;
+}
+
+.nav-bar a:hover {
+  background-color: #134e5e;
+  transform: translateY(-1px);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+/* Cards e conteúdo */
+.card-bordered {
+  border-left: 6px solid #71b280;
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.card-bordered h5 {
+  color: #71b280;
+  font-weight: 600;
+}
+
+.section-content {
+  background-color: #f8f9fa;
+  padding: 2rem 1rem;
+}
+
+/* Outros estilos */
+ul {
+  padding-left: 1.2rem;
+}
+
+ul li {
+  list-style-type: disc;
   color: #333;
 }
 
@@ -40,57 +99,21 @@ h1, h2, h5 {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1) !important;
 }
 
-ul {
-  padding-left: 1.2rem;
-}
-
-ul li {
-  list-style-type: disc;
-  color: #333;
-}
-
 .img-fluid {
   border: 4px solid white;
   border-radius: 8px;
 }
 
-.hero-section {
-  background: linear-gradient(to right, #134e5e, #71b280);
-  color: white;
-  padding: 3rem 1rem;
-  text-align: center;
-}
-
-.section-content {
-  background-color: #f8f9fa;
-  padding: 2rem 1rem;
-}
-
 .card-translucent {
   background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px); /* suporte Safari */
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
 }
 
-.card-bordered {
-  border-left: 6px solid #71b280; /* roxo elegante */
-  background-color: #ffffff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-}
-
-.card-bordered h5 {
-  color: #71b280;
-  font-weight: 600;
-}
-
-.collapse .card-body {
-  background: linear-gradient(to right, #134e5e, #71b280);
-  color: white;
-  border-top: none !important; /* remove a borda se quiser */
-  transition: background 0.3s ease;
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
 }

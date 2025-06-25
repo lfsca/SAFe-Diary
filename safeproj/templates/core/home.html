@@ -8,144 +8,71 @@
 {% endblock %}
 
 {% block content %}
-<section class="mb-5">  
-  <div class="row text-center mb-4">
-    <div class="col">
-      <section class="hero-section">
-        <h1>Scaled Agile Framework Diary</h1>
-        <h2 class="fs-4">Your guide to understanding and troubleshooting the SAFe methodology</h2>
-    </section>
-    </div>
+<section class="mb-5">
+  <div class="hero-section">
+    <h1>Scaled Agile Framework Diary</h1>
+    <h2 class="fs-4">Your guide to understanding and troubleshooting the SAFe methodology</h2>
   </div>
 
-  <div class="row g-4">
-    <div class="col-md-6">
-      <div class="card-bordered">
-        <h5 class="fw-semibold text-primary mb-3">O que é o SAFe?</h5>
-        <p>
-          O <strong>SAFe (Scaled Agile Framework)</strong> é um framework para desenvolvimento ágil em escala. Ele combina práticas do Lean, Scrum e Kanban em diversas equipes simultaneamente no chamado <strong>Trem Ágil (ART - Agile Release Train)</strong>.
-        </p>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="card-bordered">
-        <h5 class="fw-semibold text-primary mb-3">Princípios-chave</h5>
-        <ul class="mb-0">
-          <li>Desenvolvimento incremental com sprints curtos</li>
-          <li>Sincronização e cadência entre equipes</li>
-          <li>Organização em torno da entrega de valor</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="card-bordered">
-        <h5 class="fw-semibold text-primary mb-3">O que é um ART?</h5>
-        <p>
-          O <strong>Agile Release Train</strong> é um agrupamento de equipes ágeis que trabalham em paralelo e de forma sincronizada, entregando soluções inovadoras de forma contínua. Ele pode representar um ou mais produtos dentro de uma <strong>cadeia de valor</strong>.
-        </p>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="card-bordered">
-        <h5 class="fw-semibold text-primary mb-3">Ciclo PI (Program Increment)</h5>
-        <p>
-          Cada ART trabalha com ciclos de 8 a 12 semanas chamados de <strong>Program Increments (PI)</strong>, que entregam software funcional e testado. O ciclo começa com um evento chamado <strong>PI Planning</strong>, onde todos os envolvidos planejam a entrega.
-        </p>
-      </div>
-    </div>
+  <!-- Botões de Navegação -->
+  <div class="nav-bar">
+    <a href="#conceitos">Conceitos</a>
+    <a href="#principios">Princípios</a>
+    <a href="#art">O que é um ART?</a>
+    <a href="#pi">Ciclo PI</a>
+    <a href="desafios">Desafios</a>
   </div>
 </section>
 
-<!-- Imagem do SAFe -->
-<section class="text-center mb-5">
-  <img src="{% static 'img/safe.png' %}" alt="Ilustração SAFe" class="img-fluid" style="max-height: 320px;">
+<!-- Conceitos -->
+<section id="conceitos" class="section-content">
+  <div class="card-bordered">
+    <h5 class="fw-semibold mb-3">O que é o SAFe?</h5>
+    <p>
+      O <strong>SAFe (Scaled Agile Framework)</strong> é um framework para desenvolvimento ágil em escala. Ele combina práticas do Lean, Scrum e Kanban em diversas equipes simultaneamente no chamado <strong>Trem Ágil (ART - Agile Release Train)</strong>.
+    </p>
+  </div>
 </section>
 
-<!-- Cargos -->
-<section>
-  <div class="row g-3">
+<!-- Princípios -->
+<section id="principios" class="section-content">
+  <div class="card-bordered">
+    <h5 class="fw-semibold mb-3">Princípios-chave</h5>
+    <ul class="mb-0">
+      <li>Desenvolvimento incremental com sprints curtos</li>
+      <li>Sincronização e cadência entre equipes</li>
+      <li>Organização em torno da entrega de valor</li>
+    </ul>
+  </div>
+</section>
 
-    <div class="col-md-6">
-      <div class="card cargo-box shadow-sm">
-        <div class="card-body" data-bs-toggle="collapse" data-bs-target="#rte" aria-expanded="false" aria-controls="rte">
-          <h5 class="card-title m-0">Release Train Engineer (RTE)</h5>
-        </div>
-        <div class="collapse" id="rte">
-          <div class="card-body border-top">
-            Atua como líder e “coach” dos times, responsável por facilitar os processos e assegurar a integração entre os times ágeis.
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- ART -->
+<section id="art" class="section-content">
+  <div class="card-bordered">
+    <h5 class="fw-semibold mb-3">O que é um ART?</h5>
+    <p>
+      O <strong>Agile Release Train</strong> é um agrupamento de equipes ágeis que trabalham em paralelo e de forma sincronizada, entregando soluções inovadoras de forma contínua. Ele pode representar um ou mais produtos dentro de uma <strong>cadeia de valor</strong>.
+    </p>
+  </div>
+</section>
 
-    <div class="col-md-6">
-      <div class="card cargo-box shadow-sm">
-        <div class="card-body" data-bs-toggle="collapse" data-bs-target="#pm" aria-expanded="false" aria-controls="pm">
-          <h5 class="card-title m-0">Product Manager</h5>
-        </div>
-        <div class="collapse" id="pm">
-          <div class="card-body border-top">
-            Responsável por definir a direção do negócio e a visão estratégica para direcionar as estratégias do trem. Responsável pelo patrocínio e engajamento estratégico.
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- Ciclo PI -->
+<section id="pi" class="section-content">
+  <div class="card-bordered">
+    <h5 class="fw-semibold mb-3">Ciclo PI (Program Increment)</h5>
+    <p>
+      Cada ART trabalha com ciclos de 8 a 12 semanas chamados de <strong>Program Increments (PI)</strong>, que entregam software funcional e testado. O ciclo começa com um evento chamado <strong>PI Planning</strong>, onde todos os envolvidos planejam a entrega.
+    </p>
+  </div>
+</section>
 
-    <div class="col-md-6">
-      <div class="card cargo-box shadow-sm">
-        <div class="card-body" data-bs-toggle="collapse" data-bs-target="#sa" aria-expanded="false" aria-controls="sa">
-          <h5 class="card-title m-0">System Architect</h5>
-        </div>
-        <div class="collapse" id="sa">
-          <div class="card-body border-top">
-            Responsável pela visão técnica e arquitetural do trem.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="card cargo-box shadow-sm">
-        <div class="card-body" data-bs-toggle="collapse" data-bs-target="#sm" aria-expanded="false" aria-controls="sm">
-          <h5 class="card-title m-0">Scrum Master</h5>
-        </div>
-        <div class="collapse" id="sm">
-          <div class="card-body border-top">
-            Responsável por garantir a metodologia ágil dentro da equipe e solucionar qualquer impedimento encontrado pela equipe.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="card cargo-box shadow-sm">
-        <div class="card-body" data-bs-toggle="collapse" data-bs-target="#po" aria-expanded="false" aria-controls="po">
-          <h5 class="card-title m-0">Product Owner</h5>
-        </div>
-        <div class="collapse" id="po">
-          <div class="card-body border-top">
-            Responsável por priorizar as histórias de usuário no time e validar as entregas. Ele é o vínculo entre negócio e cliente; alinha entregas com objetivos e estratégia.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="card cargo-box shadow-sm">
-        <div class="card-body" data-bs-toggle="collapse" data-bs-target="#bo" aria-expanded="false" aria-controls="bo">
-          <h5 class="card-title m-0">Business Owner</h5>
-        </div>
-        <div class="collapse" id="bo">
-          <div class="card-body border-top">
-            Responsável por definir a direção do negócio e a visão estratégica para direcionar as estratégias do trem. Responsável pelo patrocínio e engajamento estratégico.
-          </div>
-        </div>
-      </div>
-    </div>
-
+<!-- Desafios -->
+<section id="desafios" class="section-content">
+  <div class="card-bordered">
+    <h5 class="fw-semibold mb-3">Desafios no SAFe</h5>
+    <p>
+      Entre os principais desafios da implementação do SAFe estão a complexidade do framework, a dificuldade no alinhamento entre equipes e a resistência cultural. Identificar e enfrentar esses desafios é essencial para o sucesso da transformação ágil.
+    </p>
   </div>
 </section>
 {% endblock %}

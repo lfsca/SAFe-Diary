@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, register, mapa, registrar_desafio, desafio_sucesso
+from .views import desafios_view, home, register, mapa, registrar_desafio
 from django.contrib.auth import views as authviews
 
 
@@ -10,5 +10,5 @@ urlpatterns = [
     path('logout/', authviews.LogoutView.as_view(next_page='login'), name='logout'),
     path('mapa/', mapa, name='mapa'),
     path('registrar-desafio/', registrar_desafio, name='registrar_desafio'),
-    path('desafio-sucesso/', desafio_sucesso, name='desafio_sucesso'),
+    path('desafios/', desafios_view, name='desafios'),
 ]
