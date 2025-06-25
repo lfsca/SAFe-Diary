@@ -1,9 +1,10 @@
+from collections import defaultdict
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from core.models import SAFeChallanges
-from .forms import RegisterForm, SAFeChallangesForm
+from .models import Ocurrence, SAFeChallenges, Solution
+from .forms import RegisterForm, SAFeChallengesForm
 
 def home(request):
     return render(request, "core/home.html")
@@ -27,23 +28,30 @@ from django.shortcuts import render
 def mapa(request):
     return render(request, 'mapa.html')
 
-def registrar_desafio(request):
+def register_challenge(request):
     if request.method == 'POST':
-        form = SAFeChallangesForm(request.POST)
+        form = SAFeChallengesForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('registrar_desafio')
+            return redirect('register_challenge')
     else:
-        form = SAFeChallangesForm()
-    return render(request, 'registrar_desafio.html', {'form': form})
+        form = SAFeChallengesForm()
+    return render(request, 'register_challenge.html', {'form': form})
 
-def desafios_view(request):
-    challenges = SAFeChallanges.objects.all().order_by('title')
-    ocurrences_by_challenge = {
-        challenge.id: challenge.ocurrences.select_related('user').all()
-        for challenge in challenges
-    }
-    return render(request, 'desafios.html', {
+def challenges_view(request):
+    challenges = SAFeChallenges.objects.all()
+    ocurrences_by_challenge = defaultdict(list)
+    solutions_by_challenge = defaultdict(list)
+
+    for oc in Ocurrence.objects.select_related('user', 'challenge'):
+        ocurrences_by_challenge[oc.challenge.id].append(oc)
+
+    for sol in Solution.objects.select_related('author', 'challenge'):
+        solutions_by_challenge[sol.challenge.id].append(sol)
+
+    return render(request, 'challenges.html', {
         'challenges': challenges,
         'ocurrences_by_challenge': ocurrences_by_challenge,
+        'solutions_by_challenge': solutions_by_challenge,
     })
+

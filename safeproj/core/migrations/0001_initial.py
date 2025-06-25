@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='SAFeChallanges',
+            name='SAFeChallenges',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(choices=[('planning', 'Planning'), ('resistence', 'Resistence to Change'), ('complexity', 'Framework Complexity'), ('communication', 'Communication'), ('other', 'Other')], max_length=30)),
@@ -24,13 +24,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='ChallangeOcurrance',
+            name='Ocurrence',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('occurred_at', models.DateTimeField(auto_now_add=True)),
                 ('notes', models.TextField(blank=True, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='challanges', to=settings.AUTH_USER_MODEL)),
-                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ocurrences', to='core.safechallanges')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='challenges', to=settings.AUTH_USER_MODEL)),
+                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ocurrences', to='core.safechallenges')),
             ],
         ),
     ]
