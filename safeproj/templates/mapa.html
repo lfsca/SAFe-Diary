@@ -1,14 +1,24 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Mapa Interativo SAFe</title>
-  <link rel="stylesheet" href="{% static 'css/mapa.css' %}">
-</head>
-<body>
 
-<canvas id="safeCanvas" width="1181" height="367"></canvas>
+{% block title %}Mapa Interativo SAFe{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/mapa.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="hero-section text-center mb-4">
+  <h1>SAFe Role Map</h1>
+  <h2 class="fs-4">Get to know the main roles of the SAFe methodology</h2>
+</div>
+
+<div class="container d-flex justify-content-center mb-5">
+  <div class="card shadow p-4" style="border-radius: 16px; background-color: #fff;">
+    <canvas id="safeCanvas" width="1181" height="367" style="border: none; outline: none; border-radius: 12px;"></canvas>
+  </div>
+</div>
 
 <div id="infoModal" class="modal">
   <div class="modal-content">
@@ -19,6 +29,4 @@
 </div>
 
 <script src="{% static 'js/mapa.js' %}"></script>
-
-</body>
-</html>
+{% endblock %}
