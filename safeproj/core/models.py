@@ -18,13 +18,13 @@ class SAFeChallenges(models.Model):
         return f"{self.get_titleo_display()} - {self.created_in.strftime('%d/%m/%Y')}"
 
 class Ocurrence(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='challenges')
-    challenge = models.ForeignKey(SAFeChallenges, on_delete=models.CASCADE, related_name='ocurrences')
-    occurred_at = models.DateTimeField(auto_now_add=True)
-    description = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    challenge = models.ForeignKey('SAFeChallenges', on_delete=models.CASCADE)
+    occurred_at = models.DateField()
+    notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.challenge.get_title_display()} on {self.occurred_at.strftime('%d/%m/%Y')}"
+        return f"{self.challenge} - {self.user} em {self.occurred_at}"
 
 class Solution(models.Model):
     challenge = models.ForeignKey(SAFeChallenges, on_delete=models.CASCADE)

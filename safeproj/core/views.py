@@ -1,10 +1,10 @@
 from collections import defaultdict
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 
 from .models import Ocurrence, SAFeChallenges, Solution
-from .forms import RegisterForm, SAFeChallengesForm
+from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm
 
 def home(request):
     return render(request, "core/home.html")
@@ -55,3 +55,22 @@ def challenges_view(request):
         'solutions_by_challenge': solutions_by_challenge,
     })
 
+def register_ocurrence(request):
+    challenge_id = request.GET.get('challenge_id')
+    challenge = get_object_or_404(SAFeChallenges, id=challenge_id)
+
+    if request.method == 'POST':
+        form = OcurrenceForm(request.POST)
+        if form.is_valid():
+            ocurrence = form.save(commit=False)
+            ocurrence.user = request.user
+            ocurrence.challenge = challenge
+            ocurrence.save()
+            return redirect('challenges')
+    else:
+        form = OcurrenceForm()
+
+    return render(request, 'register_ocurrence.html', {
+        'form': form,
+        'challenge': challenge
+    })

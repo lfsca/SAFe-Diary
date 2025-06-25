@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import SAFeChallenges
+from .models import Ocurrence, SAFeChallenges
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(label="Senha", widget=forms.PasswordInput)
@@ -32,3 +32,15 @@ class SAFeChallengesForm(forms.ModelForm):
             'description': 'Detailed Description',
         }
 
+class OcurrenceForm(forms.ModelForm):
+    class Meta:
+        model = Ocurrence
+        fields = ['occurred_at', 'notes']
+        widgets = {
+            'occurred_at': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Descreva o que aconteceu...'}),
+        }
+        labels = {
+            'occurred_at': 'Data da Ocorrência',
+            'notes': 'Notas (opcional)',
+        }

@@ -11,36 +11,35 @@
 
 {% block content %}
 <div class="">
-  <div class="hero-section">
+  <div class="hero-section text-center mb-4">
     <h1>SAFe Challenges</h1>
-    <h2 class="fs-4">Most common challanges faced while implementing the SAFe methodology</h2>
+    <h2 class="fs-4">Most common challenges faced while implementing the SAFe methodology</h2>
   </div>
 
   <!-- Select de challenges -->
-  <br>
-<div class="d-flex justify-content-center mb-5">
-  <div class="card shadow-sm border-0 p-4" style="width: 50%; background-color: #f8f9fa;">
-    <h5 class="mb-3 text-center" style="color: #71b280;">Select a Challenge</h5>
-    <select id="challenge-select" class="form-select custom-select text-center fs-5">
-      <option value="" selected disabled>---</option>
-      {% for challenge in challenges %}
-        <option value="{{ challenge.id }}">{{ challenge.get_title_display }}</option>
-      {% endfor %}
-    </select>
+  <div class="d-flex justify-content-center mb-5">
+    <div class="card shadow-sm border-0 p-4" style="width: 50%; background-color: #f8f9fa;">
+      <h5 class="mb-3 text-center" style="color: #134e5e;">Select a Challenge</h5>
+      <select id="challenge-select" class="form-select custom-select text-center fs-5">
+        <option value="" selected disabled>---</option>
+        {% for challenge in challenges %}
+          <option value="{{ challenge.id }}">{{ challenge.get_title_display }}</option>
+        {% endfor %}
+      </select>
+    </div>
   </div>
-</div>
 
   <div class="row">
     <!-- Coluna esquerda: descrição + soluções -->
     <div class="col-md-6">
       {% for challenge in challenges %}
-        <div id="desc-{{ challenge.id }}" class="card-descricao hide">
-          <h5 style="color: #71b280;">{{ challenge.get_title_display }}</h5>
+        <div id="desc-{{ challenge.id }}" class="card-descricao hide card shadow-sm p-4 mb-4" style="max-width: 85%; margin-left: auto; margin-right: auto;">
+          <h5 style="color: #134e5e;">{{ challenge.get_title_display }}</h5>
           <p>{{ challenge.description }}</p>
 
           <div class="card mt-3">
             <div class="card-body">
-              <h6 class="card-title text-success">Soluções propostas</h6>
+              <h6 class="card-title" style="color: #134e5e;">Soluções propostas</h6>
               {% if solutions_by_challenge %}
                 {% for sol in solutions_by_challenge %}
                   <div class="mb-2">
@@ -60,10 +59,11 @@
     <!-- Coluna direita: ocorrências -->
     <div class="col-md-6">
       {% for challenge in challenges %}
-        <div id="group-{{ challenge.id }}" class="hide">
+        <div id="group-{{ challenge.id }}" class="hide card shadow-sm p-4 mb-4" style="max-width: 85%; margin-left: auto; margin-right: auto;">
+          <h6 class="card-title" style="color: #134e5e;">Ocorrências</h6>
           {% if ocurrences_by_challenge %}
             {% for oc in ocurrences_by_challenge %}
-              <div class="card-ocurrence mb-3">
+              <div class="card mb-3 p-3 border-start border-4 border-success">
                 <h6><strong>Usuário:</strong> {{ oc.user.username }}</h6>
                 <p><strong>Data:</strong> {{ oc.occurred_at|date:"d/m/Y" }}</p>
                 {% if oc.notes %}
@@ -78,8 +78,14 @@
           {% endif %}
         </div>
       {% endfor %}
+      <div class="text-center mt-4">
+        <a id="btn-registrar" href="#" class="btn btn-success disabled">
+          + Registrar Ocorrência
+        </a>
+      </div>
     </div>
   </div>
 </div>
+
 <script src="{% static 'js/challenges.js' %}"></script>
 {% endblock %}

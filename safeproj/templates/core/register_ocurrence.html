@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registrar Ocorrência{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow p-4 mx-auto" style="max-width: 600px;">
+    <h3 class="text-center mb-4" style="color: #134e5e;">Registrar Ocorrência</h3>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label"><strong>Desafio:</strong></label>
+        <p class="form-control-plaintext">{{ challenge.get_title_display }}</p>
+      </div>
+
+      {{ form.non_field_errors }}
+
+      <div class="mb-3">
+        {{ form.occurred_at.label_tag }}
+        {{ form.occurred_at }}
+        {{ form.occurred_at.errors }}
+      </div>
+
+      <div class="mb-3">
+        {{ form.notes.label_tag }}
+        {{ form.notes }}
+        {{ form.notes.errors }}
+      </div>
+
+      <div class="text-end">
+        <button type="submit" class="btn btn-success">Salvar Ocorrência</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
