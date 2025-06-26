@@ -4,12 +4,36 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from django.contrib.auth import logout, login, authenticate
 
 from .models import Ocurrence, SAFeChallenges, Solution
-from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm
+from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm, SolutionForm
+import re
+from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
+from nltk.stem import PorterStemmer
 
 def home(request):
     return render(request, "core/home.html")
+
+# def login_view(request):
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
+
+#         # tenta autenticar o usuário a partir das credenciais
+#         user = authenticate(request, username=username, password=password)
+
+#         if user is not None:
+#             login(request, user)                       # aqui passam request e user
+#             messages.success(request, "Login realizado com sucesso.")
+#             return redirect("home")                    # troque "home" pelo nome da sua URL
+#         else:
+#             messages.error(request, "Usuário ou senha inválidos.")
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, "Logged out successfully.")
+    return redirect("login")
 
 def register(request):
     if request.method == "POST":
@@ -77,6 +101,14 @@ def register_ocurrence(request):
         'form': form,
         'challenge': challenge
     })
+    
+stemmer = PorterStemmer()
+def preprocess(text: str) -> str:
+    
+    """Basic tokenization, stemming and stop word removal."""
+    tokens = re.findall(r"\b\w+\b", text.lower())
+    cleaned = [stemmer.stem(t) for t in tokens if t not in ENGLISH_STOP_WORDS]
+    return " ".join(cleaned)
 
 def nlp_redirect(request):
     best_match = None
@@ -88,10 +120,12 @@ def nlp_redirect(request):
 
         if description:
             challenges = SAFeChallenges.objects.all()
-            corpus = [ch.description for ch in challenges]
+            corpus = [preprocess(ch.description) for ch in challenges]
+            description_processed = preprocess(description)
 
-            vectorizer = TfidfVectorizer().fit_transform([description] + corpus)
-            vectors = vectorizer.toarray()
+
+            vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+            vectors = vectorizer.fit_transform([description_processed] + corpus).toarray()
 
             similarities = cosine_similarity([vectors[0]], vectors[1:])[0]
             most_similar_index = int(similarities.argmax())
@@ -102,4 +136,47 @@ def nlp_redirect(request):
         "user_input": description,
         "best_match": best_match,
         "solutions": solutions
+    })
+    
+
+def suggest_solution(request):
+    challenge_id = request.GET.get("challenge_id")
+    challenge = get_object_or_404(SAFeChallenges, id=challenge_id)
+
+    if request.method == "POST":
+        form = SolutionForm(request.POST)
+        if form.is_valid():
+            solution = form.save(commit=False)
+            solution.author = request.user
+            solution.challenge = challenge
+            solution.save()
+            return redirect("challenges")
+    else:
+        form = SolutionForm()
+
+    return render(request, "suggest_solution.html", {
+        "form": form,
+        "challenge": challenge,
+    })
+
+
+def manage_solutions(request):
+    if not request.user.is_staff:
+        return redirect("login")
+
+    if request.method == "POST":
+        solution_id = request.POST.get("solution_id")
+        action = request.POST.get("action")
+        solution = get_object_or_404(Solution, id=solution_id)
+
+        if action == "accept":
+            solution.status = "accepted"
+        elif action == "reject":
+            solution.status = "rejected"
+        solution.save()
+
+    pending_solutions = Solution.objects.filter(status="pending")
+
+    return render(request, "manage_solutions.html", {
+        "solutions": pending_solutions,
     })

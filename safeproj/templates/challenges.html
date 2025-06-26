@@ -51,13 +51,18 @@
                   </div>
                 {% endfor %}
               {% else %}
-                <p class="text-muted fst-italic">Nenhuma solução registrada.</p>
+                <p class="text-muted fst-italic">No solutions registered.</p>
               {% endif %}
             {% endwith %}
             </div>
           </div>
         </div>
       {% endfor %}
+          <div id="suggest-container" class="text-center mt-4 d-none">
+          <a id="btn-suggest" href="#" class="btn btn-primary">
+            + Suggest Solution
+          </a>
+        </div>
     </div>
 
     <!-- Coluna direita: ocorrências -->
@@ -79,7 +84,7 @@
                   </div>
                 {% endfor %}
               {% else %}
-                <p class="text-muted fst-italic">Nenhuma ocorrência registrada para este challenge.</p>
+                <p class="text-muted fst-italic">No cases registered for this challenge.</p>
               {% endif %}
             {% endwith %}
         </div>

@@ -2,6 +2,7 @@ const canvas = document.getElementById("safeCanvas");
 const ctx = canvas.getContext("2d");
 const image = new Image();
 image.src = "/static/img/safe2.png";
+const tooltip = document.getElementById("tooltip");
 
 // [x, y, width, height, title, content]
 const areas = [
@@ -57,6 +58,34 @@ canvas.addEventListener("click", function (e) {
       break;
     }
   }
+});
+
+canvas.addEventListener("mousemove", function (e) {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  let found = false;
+
+  for (let area of areas) {
+    const [ax, ay, aw, ah, title, content] = area;
+    if (x >= ax && x <= ax + aw && y >= ay && y <= ay + ah) {
+      tooltip.innerHTML = `<strong>${title}</strong><br>${content}`;
+      tooltip.style.left = e.clientX + "px";
+      tooltip.style.top = e.clientY + "px";
+      tooltip.style.display = "block";
+      found = true;
+      break;
+    }
+  }
+
+  if (!found) {
+    tooltip.style.display = "none";
+  }
+});
+
+canvas.addEventListener("mouseleave", function () {
+  tooltip.style.display = "none";
 });
 
 function showModal(title, text) {

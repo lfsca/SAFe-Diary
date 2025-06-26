@@ -27,10 +27,18 @@ class Ocurrence(models.Model):
         return f"{self.challenge} - {self.user} em {self.occurred_at}"
 
 class Solution(models.Model):
+    
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("accepted", "Accepted"),
+        ("rejected", "Rejected"),
+    ]
+    
     challenge = models.ForeignKey(SAFeChallenges, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
 
     def __str__(self):
         return f"Solução por {self.author.username} para {self.challenge}"

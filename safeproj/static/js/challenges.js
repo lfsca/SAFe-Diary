@@ -3,6 +3,8 @@ const descriptions = document.querySelectorAll('.card-descricao');
 const groups = document.querySelectorAll('[id^="group-"]');
 const registrarBtn = document.getElementById('btn-registrar');
 const registrarContainer = document.getElementById('registrar-container');
+const suggestBtn = document.getElementById('btn-suggest');
+const suggestContainer = document.getElementById('suggest-container');
 
 select.addEventListener('change', () => {
   descriptions.forEach(d => d.classList.add('hide'));
@@ -19,8 +21,12 @@ select.addEventListener('change', () => {
   if (selectedId) {
     registrarContainer.classList.remove('d-none');
     registrarBtn.href = `/registrar_ocorrencia/?challenge_id=${selectedId}`;
+    suggestContainer.classList.remove('d-none');
+    suggestBtn.href = `/suggest_solution/?challenge_id=${selectedId}`;
   } else {
     registrarContainer.classList.add('d-none');
     registrarBtn.href = '#';
+    suggestContainer.classList.add('d-none');
+    suggestBtn.href = '#';
   }
 });

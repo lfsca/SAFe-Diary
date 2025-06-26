@@ -23,7 +23,7 @@
       <div>
         <h5 class="offcanvas-title" id="sidebarLabel">SAFe Framework</h5>
         {% if request.user.is_authenticated %}
-          <p class="text-muted small mt-1">Olá, {{ request.user.first_name|default:request.user.username }}!</p>
+          <p class="small mt-1">Olá, {{ request.user.first_name|default:request.user.username }}!</p>
         {% endif %}
       </div>
       <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Fechar sidebar">
@@ -36,6 +36,9 @@
         <a href="{% url 'logout' %}">Logout</a>
         <a href="/challenges">Challenges</a>
         <a href="/search">Describe Your Problem</a>
+        {% if request.user.is_staff %}
+          <a href="{% url 'manage_solutions' %}">Manage Solutions</a>
+        {% endif %}
       {% else %}
         <a href="/register">Register</a>
         <a href="/login">Login</a>
