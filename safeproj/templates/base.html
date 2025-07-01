@@ -12,6 +12,9 @@
 {% block head %}{% endblock %}
 <body>
 
+  <!-- Botão de voltar -->
+  <a href="javascript:history.back()" class="back-btn">&lt;</a>
+
   <!-- Botão para abrir sidebar -->
   <button class="sidebar-toggle" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
     &gt;
@@ -23,7 +26,10 @@
       <div>
         <h5 class="offcanvas-title" id="sidebarLabel">SAFe Framework</h5>
         {% if request.user.is_authenticated %}
-          <p class="small mt-1">Olá, {{ request.user.first_name|default:request.user.username }}!</p>
+          <p class="small mt-1">Olá, {{ request.user.first_name|default:request.user.username }}!
+            {% if request.user.is_staff %} <span class="badge bg-secondary">Administrador</span> {% endif %}
+          </p>
+          
         {% endif %}
       </div>
       <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Fechar sidebar">

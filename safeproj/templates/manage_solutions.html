@@ -3,32 +3,69 @@
 
 {% block title %}Manage Solutions{% endblock %}
 
-{% block content %}
-<div class="">
-  <div class="hero-section text-center mb-4">
-    <h1>Pending Solutions</h1>
-  </div>
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/manage_solutions.css' %}">
+{% endblock %}
 
-  {% if solutions %}
-    <div class="container">
-      {% for sol in solutions %}
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">{{ sol.challenge.get_title_display }}</h5>
-            <p class="card-text">{{ sol.description }}</p>
-            <p class="card-text"><small class="text-muted">By {{ sol.author.username }}</small></p>
-            <form method="post" class="d-inline">
-              {% csrf_token %}
-              <input type="hidden" name="solution_id" value="{{ sol.id }}">
-              <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
-              <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
-            </form>
-          </div>
-        </div>
-      {% endfor %}
+{% block content %}
+
+  <div class="hero-section text-center mb-4">
+    <h1>Manage Solutions</h1>
+  </div>
+<div class="container">
+  <form id="filter-form" class="row g-3 justify-content-center mb-4" method="get">
+    <div class="col-md-4">
+      <select id="challenge-select" name="challenge" class="form-select text-center">
+        <option value="" selected disabled>Select Challenge</option>
+        {% for ch in challenges %}
+          <option value="{{ ch.id }}" {% if ch.id|stringformat:'s' == selected_challenge %}selected{% endif %}>{{ ch.get_title_display }}</option>
+        {% endfor %}
+      </select>
     </div>
-  {% else %}
-    <p class="text-center text-muted">No solutions awaiting approval.</p>
-  {% endif %}
+    <div class="col-md-4">
+      <select id="status-select" name="status" class="form-select text-center" {% if not selected_challenge %}disabled{% endif %}>
+        <option value="" selected disabled>Select Status</option>
+        {% for key,label in status_choices %}
+          <option value="{{ key }}" {% if key == selected_status %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+
+  <div class="row px-3">
+    <div class="col-md-6 mb-4" id="solutions-column">
+      {% if solutions %}
+        {% for sol in solutions %}
+          <div class="card mb-3 solution-card" data-id="{{ sol.id }}" data-description="{{ sol.description|escapejs }}" data-author="{{ sol.author.username }}" data-challenge="{{ sol.challenge.get_title_display }}" data-status="{{ sol.get_status_display }}">
+            <div class="card-body">
+              <h5 class="card-title">Solution #{{ sol.id }}</h5>
+              <p class="card-text text-truncate">{{ sol.description }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% elif selected_challenge and selected_status %}
+        <p class="text-center text-muted">No solutions found.</p>
+      {% endif %}
+    </div>
+    <div class="col-md-6 mb-4">
+      <div id="solution-detail" class="card d-none">
+        <div class="card-body">
+          <h5 class="card-title" id="detail-challenge"></h5>
+          <p class="card-text" id="detail-description"></p>
+          <p class="card-text"><small class="text-muted" id="detail-author"></small></p>
+          <form method="post" id="action-form" class="d-flex gap-2 mt-3">
+            {% csrf_token %}
+            <input type="hidden" name="challenge" value="{{ selected_challenge }}">
+            <input type="hidden" name="status" value="{{ selected_status }}">
+            <input type="hidden" name="solution_id" id="solution-id-input">
+            <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+            <button type="submit" name="action" value="pend" class="btn btn-warning btn-sm">Mark Pending</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<script src="{% static 'js/manage_solutions.js' %}"></script>
 {% endblock %}

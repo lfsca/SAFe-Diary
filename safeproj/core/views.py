@@ -173,10 +173,28 @@ def manage_solutions(request):
             solution.status = "accepted"
         elif action == "reject":
             solution.status = "rejected"
+        elif action == "pend":
+            solution.status = "pending"
         solution.save()
 
-    pending_solutions = Solution.objects.filter(status="pending")
+        challenge_id = request.POST.get("challenge")
+        status = request.POST.get("status")
+    else:
+        challenge_id = request.GET.get("challenge")
+        status = request.GET.get("status")
+
+    challenges = SAFeChallenges.objects.all().order_by("title")
+
+    solutions = []
+    if challenge_id and status:
+        solutions = Solution.objects.filter(challenge_id=challenge_id, status=status)
+
+    status_choices = Solution.STATUS_CHOICES
 
     return render(request, "manage_solutions.html", {
-        "solutions": pending_solutions,
+        "challenges": challenges,
+        "solutions": solutions,
+        "selected_challenge": challenge_id,
+        "selected_status": status,
+        "status_choices": status_choices,
     })
