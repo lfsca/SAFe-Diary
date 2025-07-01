@@ -16,13 +16,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (challengeSelect) {
     challengeSelect.addEventListener('change', function () {
-      // Ativa o campo de status ao selecionar um challenge
       if (challengeSelect.value) {
         statusSelect.disabled = false;
       } else {
         statusSelect.disabled = true;
       }
-
       maybeSubmit();
     });
   }
@@ -55,16 +53,16 @@ document.addEventListener('DOMContentLoaded', function () {
       idInput.value = id;
 
       if (status === 'Pending') {
-        acceptBtn.classList.remove('d-none');
-        rejectBtn.classList.remove('d-none');
-        pendBtn.classList.add('d-none');
+        acceptBtn?.classList.remove('hide');
+        rejectBtn?.classList.remove('hide');
+        pendBtn?.classList.add('hide');
       } else {
-        acceptBtn.classList.add('d-none');
-        rejectBtn.classList.add('d-none');
-        pendBtn.classList.remove('d-none');
+        acceptBtn?.classList.add('hide');
+        rejectBtn?.classList.add('hide');
+        pendBtn?.classList.remove('hide');
       }
 
-      detailCard.classList.remove('d-none');
+      detailCard.classList.remove('hide');
     });
   });
 });

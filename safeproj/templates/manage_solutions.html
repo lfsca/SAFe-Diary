@@ -5,6 +5,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/manage_solutions.css' %}">
+<link rel="stylesheet" href="{% static 'css/challenges.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -12,7 +13,7 @@
   <div class="hero-section text-center mb-4">
     <h1>Manage Solutions</h1>
   </div>
-<div class="container">
+  <div class="container">
   <form id="filter-form" class="row g-3 justify-content-center mb-4" method="get">
     <div class="col-md-4">
       <select id="challenge-select" name="challenge" class="form-select text-center">
@@ -36,11 +37,9 @@
     <div class="col-md-6 mb-4" id="solutions-column">
       {% if solutions %}
         {% for sol in solutions %}
-          <div class="card mb-3 solution-card" data-id="{{ sol.id }}" data-description="{{ sol.description|escapejs }}" data-author="{{ sol.author.username }}" data-challenge="{{ sol.challenge.get_title_display }}" data-status="{{ sol.get_status_display }}">
-            <div class="card-body">
-              <h5 class="card-title">Solution #{{ sol.id }}</h5>
-              <p class="card-text text-truncate">{{ sol.description }}</p>
-            </div>
+          <div class="card-ocurrence solution-card" data-id="{{ sol.id }}" data-description="{{ sol.description|escapejs }}" data-author="{{ sol.author.username }}" data-challenge="{{ sol.challenge.get_title_display }}" data-status="{{ sol.get_status_display }}">
+            <h6>Solution #{{ sol.id }}</h6>
+            <p class="text-truncate mb-0">{{ sol.description }}</p>
           </div>
         {% endfor %}
       {% elif selected_challenge and selected_status %}
@@ -48,21 +47,19 @@
       {% endif %}
     </div>
     <div class="col-md-6 mb-4">
-      <div id="solution-detail" class="card d-none">
-        <div class="card-body">
-          <h5 class="card-title" id="detail-challenge"></h5>
-          <p class="card-text" id="detail-description"></p>
-          <p class="card-text"><small class="text-muted" id="detail-author"></small></p>
-          <form method="post" id="action-form" class="d-flex gap-2 mt-3">
-            {% csrf_token %}
-            <input type="hidden" name="challenge" value="{{ selected_challenge }}">
-            <input type="hidden" name="status" value="{{ selected_status }}">
-            <input type="hidden" name="solution_id" id="solution-id-input">
-            <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
-            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
-            <button type="submit" name="action" value="pend" class="btn btn-warning btn-sm">Mark Pending</button>
-          </form>
-        </div>
+      <div id="solution-detail" class="card-descricao hide">
+        <h5 id="detail-challenge"></h5>
+        <p id="detail-description"></p>
+        <p><small class="text-muted" id="detail-author"></small></p>
+        <form method="post" id="action-form" class="d-flex gap-2 mt-3">
+          {% csrf_token %}
+          <input type="hidden" name="challenge" value="{{ selected_challenge }}">
+          <input type="hidden" name="status" value="{{ selected_status }}">
+          <input type="hidden" name="solution_id" id="solution-id-input">
+          <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+          <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+          <button type="submit" name="action" value="pend" class="btn btn-warning btn-sm">Mark Pending</button>
+        </form>
       </div>
     </div>
   </div>

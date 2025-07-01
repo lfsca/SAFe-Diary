@@ -73,7 +73,7 @@ def challenges_view(request):
 
     # Organiza soluções por challenge ID
     solutions_by_challenge = {
-        ch.id: Solution.objects.filter(challenge=ch) for ch in challenges
+        ch.id: Solution.objects.filter(challenge=ch, status = "accepted") for ch in challenges
     }
 
     return render(request, 'challenges.html', {
