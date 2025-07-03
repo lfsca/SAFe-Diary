@@ -8,7 +8,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.stem import PorterStemmer
 
-from .models import Ocurrence, SAFeChallenges, Solution
+from .models import (
+    Ocurrence,
+    SAFeChallenges,
+    Solution,
+    StatusChoices,
+)
 
 
 class TextPreprocessor:
@@ -33,7 +38,9 @@ class ChallengeMatcher:
         corpus = []
         for ch in challenges:
             notes_qs = (
-                Ocurrence.objects.filter(challenge=ch, status="accepted")
+                Ocurrence.objects.filter(
+                    challenge=ch, status=StatusChoices.ACCEPTED
+                )
                 .exclude(notes__isnull=True)
                 .exclude(notes__exact="")
             )
@@ -63,9 +70,9 @@ class StatusTransitionService:
     """Centralize status transition rules for items."""
 
     ACTION_MAP = {
-        "accept": "accepted",
-        "reject": "rejected",
-        "pend": "pending",
+        "accept": StatusChoices.ACCEPTED,
+        "reject": StatusChoices.REJECTED,
+        "pend": StatusChoices.PENDING,
     }
 
     def update(self, item, action: str):

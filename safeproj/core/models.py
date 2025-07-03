@@ -1,22 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-STATUS_CHOICES = [
-    ("pending", "Pending"),
-    ("accepted", "Accepted"),
-    ("rejected", "Rejected"),
-]
+
+class StatusChoices(models.TextChoices):
+    PENDING = "pending", "Pending"
+    ACCEPTED = "accepted", "Accepted"
+    REJECTED = "rejected", "Rejected"
+
+
+class ChallengeTitle(models.TextChoices):
+    PLANNING = "planning", "Planning"
+    RESISTENCE = "resistence", "Resistence to Change"
+    COMPLEXITY = "complexity", "Framework Complexity"
+    COMMUNICATION = "communication", "Communication"
+    OTHER = "other", "Other"
 
 class SAFeChallenges(models.Model):
-    titles = [
-        ('planning', 'Planning'),
-        ('resistence', 'Resistence to Change'),
-        ('complexity', 'Framework Complexity'),
-        ('communication', 'Communication'),
-        ('other', 'Other'),
-    ]
-
-    title = models.CharField(max_length=30, choices=titles)
+    title = models.CharField(max_length=30, choices=ChallengeTitle.choices)
     description = models.TextField()
     created_in = models.DateTimeField(auto_now_add=True)
 
@@ -28,7 +28,7 @@ class Ocurrence(models.Model):
     challenge = models.ForeignKey('SAFeChallenges', on_delete=models.CASCADE)
     occurred_at = models.DateField()
     notes = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
+    status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.PENDING)
 
     def __str__(self):
         return f"{self.challenge} - {self.user} em {self.occurred_at}"
@@ -39,7 +39,7 @@ class Solution(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
+    status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.PENDING)
 
     def __str__(self):
         return f"Solução por {self.author.username} para {self.challenge}"
