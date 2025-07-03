@@ -15,21 +15,6 @@ from nltk.stem import PorterStemmer
 def home(request):
     return render(request, "core/home.html")
 
-# def login_view(request):
-#     if request.method == "POST":
-#         username = request.POST.get("username")
-#         password = request.POST.get("password")
-
-#         # tenta autenticar o usuário a partir das credenciais
-#         user = authenticate(request, username=username, password=password)
-
-#         if user is not None:
-#             login(request, user)                       # aqui passam request e user
-#             messages.success(request, "Login realizado com sucesso.")
-#             return redirect("home")                    # troque "home" pelo nome da sua URL
-#         else:
-#             messages.error(request, "Usuário ou senha inválidos.")
-
 def logout_view(request):
     logout(request)
     messages.info(request, "Logged out successfully.")

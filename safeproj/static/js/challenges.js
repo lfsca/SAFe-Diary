@@ -20,7 +20,7 @@ select.addEventListener('change', () => {
   // Exibir botão com URL atualizada
   if (selectedId) {
     registrarContainer.classList.remove('d-none');
-    registrarBtn.href = `/registrar_ocorrencia/?challenge_id=${selectedId}`;
+    registrarBtn.href = `/register_ocurrence/?challenge_id=${selectedId}`;
     suggestContainer.classList.remove('d-none');
     suggestBtn.href = `/suggest_solution/?challenge_id=${selectedId}`;
   } else {

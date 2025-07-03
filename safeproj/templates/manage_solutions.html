@@ -12,32 +12,37 @@
 
   <div class="hero-section text-center mb-4">
     <h1>Manage Solutions</h1>
+    <h2 class="fs-4">Manage the solutions that can help solve the main challenges of the SAFe methodology</h2>
   </div>
   <div class="container">
-  <form id="filter-form" class="row g-3 justify-content-center mb-4" method="get">
-    <div class="col-md-4">
-      <select id="challenge-select" name="challenge" class="form-select text-center">
-        <option value="" selected disabled>Select Challenge</option>
-        {% for ch in challenges %}
-          <option value="{{ ch.id }}" {% if ch.id|stringformat:'s' == selected_challenge %}selected{% endif %}>{{ ch.get_title_display }}</option>
-        {% endfor %}
-      </select>
+  <div class="d-flex justify-content-center mb-4">
+    <div class="card shadow-sm border-0 p-4" style="width: 50%; background-color: #f8f9fa;">
+      <form id="filter-form" class="row g-3" method="get">
+        <div class="col-md-6">
+          <select id="challenge-select" name="challenge" class="form-select text-center">
+            <option value="" selected disabled>Select Challenge</option>
+            {% for ch in challenges %}
+              <option value="{{ ch.id }}" {% if ch.id|stringformat:'s' == selected_challenge %}selected{% endif %}>{{ ch.get_title_display }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <select id="status-select" name="status" class="form-select text-center" {% if not selected_challenge %}disabled{% endif %}>
+            <option value="" selected disabled>Select Status</option>
+            {% for key,label in status_choices %}
+              <option value="{{ key }}" {% if key == selected_status %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
     </div>
-    <div class="col-md-4">
-      <select id="status-select" name="status" class="form-select text-center" {% if not selected_challenge %}disabled{% endif %}>
-        <option value="" selected disabled>Select Status</option>
-        {% for key,label in status_choices %}
-          <option value="{{ key }}" {% if key == selected_status %}selected{% endif %}>{{ label }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </form>
+  </div>
 
   <div class="row px-3">
     <div class="col-md-6 mb-4" id="solutions-column">
       {% if solutions %}
         {% for sol in solutions %}
-          <div class="card-ocurrence solution-card" data-id="{{ sol.id }}" data-description="{{ sol.description|escapejs }}" data-author="{{ sol.author.username }}" data-challenge="{{ sol.challenge.get_title_display }}" data-status="{{ sol.get_status_display }}">
+          <div class="card-ocurrence solution-card" style="max-width: 85%; margin-left: auto; margin-right: auto;" data-id="{{ sol.id }}" data-description="{{ sol.description|escapejs }}" data-author="{{ sol.author.username }}" data-challenge="{{ sol.challenge.get_title_display }}" data-status="{{ sol.get_status_display }}">
             <h6>Solution #{{ sol.id }}</h6>
             <p class="text-truncate mb-0">{{ sol.description }}</p>
           </div>
@@ -47,7 +52,7 @@
       {% endif %}
     </div>
     <div class="col-md-6 mb-4">
-      <div id="solution-detail" class="card-descricao hide">
+      <div id="solution-detail" class="card-descricao hide card shadow-sm p-4" style="max-width: 85%; margin-left: auto; margin-right: auto;">
         <h5 id="detail-challenge"></h5>
         <p id="detail-description"></p>
         <p><small class="text-muted" id="detail-author"></small></p>
