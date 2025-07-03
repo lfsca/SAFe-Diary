@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm, SolutionForm
-from .models import Ocurrence, SAFeChallenges, Solution, STATUS_CHOICES
+from .models import Ocurrence, SAFeChallenges, Solution, StatusChoices
 from .services import ChallengeMatcher, StatusTransitionService
 
 
@@ -46,12 +46,18 @@ def challenges_view(request):
 
     # Organiza ocorrências por challenge ID
     ocurrences_by_challenge = {
-        ch.id: Ocurrence.objects.filter(challenge=ch, status="accepted") for ch in challenges
+        ch.id: Ocurrence.objects.filter(
+            challenge=ch, status=StatusChoices.ACCEPTED
+        )
+        for ch in challenges
     }
 
     # Organiza soluções por challenge ID
     solutions_by_challenge = {
-        ch.id: Solution.objects.filter(challenge=ch, status = "accepted") for ch in challenges
+        ch.id: Solution.objects.filter(
+            challenge=ch, status=StatusChoices.ACCEPTED
+        )
+        for ch in challenges
     }
 
     return render(request, 'challenges.html', {
@@ -153,7 +159,7 @@ def manage(request):
         Model = Solution if item_type == "solution" else Ocurrence
         items = Model.objects.filter(challenge_id=challenge_id, status=status)
 
-    status_choices = STATUS_CHOICES
+    status_choices = StatusChoices.choices
 
     return render(request, "manage.html", {
         "challenges": challenges,
