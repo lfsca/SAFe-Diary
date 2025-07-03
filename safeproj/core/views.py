@@ -1,16 +1,12 @@
-from collections import defaultdict
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.models import User
 from django.contrib import messages
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404, render, redirect
 
-from .models import Ocurrence, SAFeChallenges, Solution, STATUS_CHOICES
 from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm, SolutionForm
-import re
-from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
-from nltk.stem import PorterStemmer
+from .models import Ocurrence, SAFeChallenges, Solution, STATUS_CHOICES
+from .services import ChallengeMatcher, StatusTransitionService
+
 
 def home(request):
     return render(request, "core/home.html")
@@ -32,9 +28,6 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, "registration/register.html", {"form": form})
-
-
-from django.shortcuts import render
 
 def mapa(request):
     return render(request, 'mapa.html')
@@ -85,15 +78,7 @@ def register_ocurrence(request):
     return render(request, 'register_ocurrence.html', {
         'form': form,
         'challenge': challenge
-    })  
-    
-stemmer = PorterStemmer()
-def preprocess(text: str) -> str:
-    
-    """Basic tokenization, stemming and stop word removal."""
-    tokens = re.findall(r"\b\w+\b", text.lower())
-    cleaned = [stemmer.stem(t) for t in tokens if t not in ENGLISH_STOP_WORDS]
-    return " ".join(cleaned)
+    })
 
 def nlp_redirect(request):
     best_match = None
@@ -104,27 +89,8 @@ def nlp_redirect(request):
         description = request.POST.get("description", "").strip()
 
         if description:
-            challenges = SAFeChallenges.objects.all()
-            corpus = []
-            for ch in challenges:
-                notes_qs = (
-                    Ocurrence.objects.filter(challenge=ch, status="accepted")
-                    .exclude(notes__isnull=True)
-                    .exclude(notes__exact="")
-                )
-                accepted_notes = " ".join(oc.notes for oc in notes_qs)
-                combined_text = f"{ch.description} {accepted_notes}"
-                corpus.append(preprocess(combined_text))
-            description_processed = preprocess(description)
-
-
-            vectorizer = TfidfVectorizer(ngram_range=(1, 2))
-            vectors = vectorizer.fit_transform([description_processed] + corpus).toarray()
-
-            similarities = cosine_similarity([vectors[0]], vectors[1:])[0]
-            most_similar_index = int(similarities.argmax())
-            best_match = challenges[most_similar_index]
-            solutions = Solution.objects.filter(challenge=best_match)
+            matcher = ChallengeMatcher()
+            best_match, solutions = matcher.find_best_match(description)
 
     return render(request, "nlp_redirect.html", {
         "user_input": description,
@@ -158,6 +124,8 @@ def manage(request):
     if not request.user.is_staff:
         return redirect("login")
 
+    status_service = StatusTransitionService()
+
     if request.method == "POST":
         item_type = request.POST.get("type")
         item_id = request.POST.get("item_id")
@@ -168,13 +136,7 @@ def manage(request):
         else:
             item = get_object_or_404(Ocurrence, id=item_id)
 
-        if action == "accept":
-            item.status = "accepted"
-        elif action == "reject":
-            item.status = "rejected"
-        elif action == "pend":
-            item.status = "pending"
-        item.save()
+        status_service.update(item, action)
 
         item_type = request.POST.get("type")
         challenge_id = request.POST.get("challenge")
