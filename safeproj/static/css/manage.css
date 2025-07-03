@@ -1,7 +1,7 @@
-.solution-card {
+.manage-card {
   cursor: pointer;
 }
 
-#solution-detail {
+#item-detail {
   background-color: #f8f9fa;
 }

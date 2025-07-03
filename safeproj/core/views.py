@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from django.contrib.auth import logout, login, authenticate
 
-from .models import Ocurrence, SAFeChallenges, Solution
+from .models import Ocurrence, SAFeChallenges, Solution, STATUS_CHOICES
 from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm, SolutionForm
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
@@ -53,7 +53,7 @@ def challenges_view(request):
 
     # Organiza ocorrências por challenge ID
     ocurrences_by_challenge = {
-        ch.id: Ocurrence.objects.filter(challenge=ch) for ch in challenges
+        ch.id: Ocurrence.objects.filter(challenge=ch, status="accepted") for ch in challenges
     }
 
     # Organiza soluções por challenge ID
@@ -85,7 +85,7 @@ def register_ocurrence(request):
     return render(request, 'register_ocurrence.html', {
         'form': form,
         'challenge': challenge
-    })
+    })  
     
 stemmer = PorterStemmer()
 def preprocess(text: str) -> str:
@@ -145,41 +145,50 @@ def suggest_solution(request):
     })
 
 
-def manage_solutions(request):
+def manage(request):
     if not request.user.is_staff:
         return redirect("login")
 
     if request.method == "POST":
-        solution_id = request.POST.get("solution_id")
+        item_type = request.POST.get("type")
+        item_id = request.POST.get("item_id")
         action = request.POST.get("action")
-        solution = get_object_or_404(Solution, id=solution_id)
+
+        if item_type == "solution":
+            item = get_object_or_404(Solution, id=item_id)
+        else:
+            item = get_object_or_404(Ocurrence, id=item_id)
 
         if action == "accept":
-            solution.status = "accepted"
+            item.status = "accepted"
         elif action == "reject":
-            solution.status = "rejected"
+            item.status = "rejected"
         elif action == "pend":
-            solution.status = "pending"
-        solution.save()
+            item.status = "pending"
+        item.save()
 
+        item_type = request.POST.get("type")
         challenge_id = request.POST.get("challenge")
         status = request.POST.get("status")
     else:
+        item_type = request.GET.get("type")
         challenge_id = request.GET.get("challenge")
         status = request.GET.get("status")
 
     challenges = SAFeChallenges.objects.all().order_by("title")
 
-    solutions = []
-    if challenge_id and status:
-        solutions = Solution.objects.filter(challenge_id=challenge_id, status=status)
+    items = []
+    if item_type and challenge_id and status:
+        Model = Solution if item_type == "solution" else Ocurrence
+        items = Model.objects.filter(challenge_id=challenge_id, status=status)
 
-    status_choices = Solution.STATUS_CHOICES
+    status_choices = STATUS_CHOICES
 
-    return render(request, "manage_solutions.html", {
+    return render(request, "manage.html", {
         "challenges": challenges,
-        "solutions": solutions,
+        "items": items,
         "selected_challenge": challenge_id,
         "selected_status": status,
         "status_choices": status_choices,
+        "selected_type": item_type,
     })

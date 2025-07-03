@@ -1,24 +1,31 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Manage Solutions{% endblock %}
+{% block title %}Manage{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/manage_solutions.css' %}">
+<link rel="stylesheet" href="{% static 'css/manage.css' %}">
 <link rel="stylesheet" href="{% static 'css/challenges.css' %}">
 {% endblock %}
 
 {% block content %}
 
   <div class="hero-section text-center mb-4">
-    <h1>Manage Solutions</h1>
-    <h2 class="fs-4">Manage the solutions that can help solve the main challenges of the SAFe methodology</h2>
+    <h1>Manage</h1>
+    <h2 class="fs-4">Approve or reject occurrences and solutions</h2>
   </div>
   <div class="container">
   <div class="d-flex justify-content-center mb-4">
     <div class="card shadow-sm border-0 p-4" style="width: 50%; background-color: #f8f9fa;">
       <form id="filter-form" class="row g-3" method="get">
-        <div class="col-md-6">
+        <div class="col-md-4">
+          <select id="type-select" name="type" class="form-select text-center">
+            <option value="" selected disabled>Select Type</option>
+            <option value="solution" {% if selected_type == 'solution' %}selected{% endif %}>Solution</option>
+            <option value="occurrence" {% if selected_type == 'occurrence' %}selected{% endif %}>Occurrence</option>
+          </select>
+        </div>
+        <div class="col-md-4">
           <select id="challenge-select" name="challenge" class="form-select text-center">
             <option value="" selected disabled>Select Challenge</option>
             {% for ch in challenges %}
@@ -26,8 +33,8 @@
             {% endfor %}
           </select>
         </div>
-        <div class="col-md-6">
-          <select id="status-select" name="status" class="form-select text-center" {% if not selected_challenge %}disabled{% endif %}>
+        <div class="col-md-4">
+          <select id="status-select" name="status" class="form-select text-center">
             <option value="" selected disabled>Select Status</option>
             {% for key,label in status_choices %}
               <option value="{{ key }}" {% if key == selected_status %}selected{% endif %}>{{ label }}</option>
@@ -39,28 +46,37 @@
   </div>
 
   <div class="row px-3">
-    <div class="col-md-6 mb-4" id="solutions-column">
-      {% if solutions %}
-        {% for sol in solutions %}
-          <div class="card-ocurrence solution-card" style="max-width: 85%; margin-left: auto; margin-right: auto;" data-id="{{ sol.id }}" data-description="{{ sol.description|escapejs }}" data-author="{{ sol.author.username }}" data-challenge="{{ sol.challenge.get_title_display }}" data-status="{{ sol.get_status_display }}">
-            <h6>Solution #{{ sol.id }}</h6>
-            <p class="text-truncate mb-0">{{ sol.description }}</p>
+    <div class="col-md-6 mb-4" id="items-column">
+      {% if items %}
+        {% for it in items %}
+          <div class="card-ocurrence manage-card" style="max-width: 85%; margin-left: auto; margin-right: auto;" data-id="{{ it.id }}" data-description="{% if selected_type == 'solution' %}{{ it.description|escapejs }}{% else %}{{ it.notes|escapejs }}{% endif %}"
+data-author="{% if selected_type == 'solution' %}{{ it.author.username }}{% else %}{{ it.user.username }}{% endif %}"
+ data-challenge="{{ it.challenge.get_title_display }}" data-status="{{ it.get_status_display }}">
+            <h6>{{ selected_type|title }} #{{ it.id }}</h6>
+            <p class="text-truncate mb-0">
+              {% if selected_type == "solution" %}
+                {{ it.description }}
+              {% else %}
+                {{ it.notes }}
+              {% endif %}
+            </p>
           </div>
         {% endfor %}
       {% elif selected_challenge and selected_status %}
-        <p class="text-center text-muted">No solutions found.</p>
+        <p class="text-center text-muted">No entries found.</p>
       {% endif %}
     </div>
     <div class="col-md-6 mb-4">
-      <div id="solution-detail" class="card-descricao hide card shadow-sm p-4" style="max-width: 85%; margin-left: auto; margin-right: auto;">
+      <div id="item-detail" class="card-descricao hide card shadow-sm p-4" style="max-width: 85%; margin-left: auto; margin-right: auto;">
         <h5 id="detail-challenge"></h5>
         <p id="detail-description"></p>
         <p><small class="text-muted" id="detail-author"></small></p>
         <form method="post" id="action-form" class="d-flex gap-2 mt-3">
           {% csrf_token %}
+          <input type="hidden" name="type" value="{{ selected_type }}">
           <input type="hidden" name="challenge" value="{{ selected_challenge }}">
           <input type="hidden" name="status" value="{{ selected_status }}">
-          <input type="hidden" name="solution_id" id="solution-id-input">
+          <input type="hidden" name="item_id" id="item-id-input">
           <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
           <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
           <button type="submit" name="action" value="pend" class="btn btn-warning btn-sm">Mark Pending</button>
@@ -69,5 +85,5 @@
     </div>
   </div>
 </div>
-<script src="{% static 'js/manage_solutions.js' %}"></script>
+<script src="{% static 'js/manage.js' %}"></script>
 {% endblock %}

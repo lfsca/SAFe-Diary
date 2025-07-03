@@ -1,22 +1,45 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const typeSelect = document.getElementById('type-select');
   const challengeSelect = document.getElementById('challenge-select');
   const statusSelect = document.getElementById('status-select');
   const form = document.getElementById('filter-form');
 
-  // Desabilita o select de status se não houver challenge selecionado
-  if (!challengeSelect.value) {
+  if (!typeSelect.value) {
+    challengeSelect.disabled = true;
     statusSelect.disabled = true;
+  } else if (!challengeSelect.value) {
+    statusSelect.disabled = true;
+  } else {
+    statusSelect.disabled = false;
   }
 
   function maybeSubmit() {
-    if (challengeSelect.value && statusSelect.value) {
+    if (typeSelect.value && challengeSelect.value && statusSelect.value) {
+      typeSelect.removeAttribute('disabled');
+      challengeSelect.removeAttribute('disabled');
+      statusSelect.removeAttribute('disabled');
       form.submit();
     }
   }
 
+  if (typeSelect) {
+    typeSelect.addEventListener('change', function () {
+      if (typeSelect.value) {
+        challengeSelect.disabled = false;
+        if (challengeSelect.value) {
+          statusSelect.disabled = false;
+        }
+      } else {
+        challengeSelect.disabled = true;
+        statusSelect.disabled = true;
+      }
+      maybeSubmit();
+    });
+  }
+
   if (challengeSelect) {
     challengeSelect.addEventListener('change', function () {
-      if (challengeSelect.value) {
+      if (typeSelect.value && challengeSelect.value) {
         statusSelect.disabled = false;
       } else {
         statusSelect.disabled = true;
@@ -29,12 +52,12 @@ document.addEventListener('DOMContentLoaded', function () {
     statusSelect.addEventListener('change', maybeSubmit);
   }
 
-  const cards = document.querySelectorAll('.solution-card');
-  const detailCard = document.getElementById('solution-detail');
+  const cards = document.querySelectorAll('.manage-card');
+  const detailCard = document.getElementById('item-detail');
   const descEl = document.getElementById('detail-description');
   const authorEl = document.getElementById('detail-author');
   const challengeEl = document.getElementById('detail-challenge');
-  const idInput = document.getElementById('solution-id-input');
+  const idInput = document.getElementById('item-id-input');
   const acceptBtn = detailCard ? detailCard.querySelector('button[value="accept"]') : null;
   const rejectBtn = detailCard ? detailCard.querySelector('button[value="reject"]') : null;
   const pendBtn = detailCard ? detailCard.querySelector('button[value="pend"]') : null;

@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+STATUS_CHOICES = [
+    ("pending", "Pending"),
+    ("accepted", "Accepted"),
+    ("rejected", "Rejected"),
+]
+
 class SAFeChallenges(models.Model):
     titles = [
         ('planning', 'Planning'),
@@ -15,24 +21,19 @@ class SAFeChallenges(models.Model):
     created_in = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.get_titleo_display()} - {self.created_in.strftime('%d/%m/%Y')}"
+        return f"{self.get_title_display()} - {self.created_in.strftime('%d/%m/%Y')}"
 
 class Ocurrence(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge = models.ForeignKey('SAFeChallenges', on_delete=models.CASCADE)
     occurred_at = models.DateField()
     notes = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
 
     def __str__(self):
         return f"{self.challenge} - {self.user} em {self.occurred_at}"
 
 class Solution(models.Model):
-    
-    STATUS_CHOICES = [
-        ("pending", "Pending"),
-        ("accepted", "Accepted"),
-        ("rejected", "Rejected"),
-    ]
     
     challenge = models.ForeignKey(SAFeChallenges, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
