@@ -105,7 +105,16 @@ def nlp_redirect(request):
 
         if description:
             challenges = SAFeChallenges.objects.all()
-            corpus = [preprocess(ch.description) for ch in challenges]
+            corpus = []
+            for ch in challenges:
+                notes_qs = (
+                    Ocurrence.objects.filter(challenge=ch, status="accepted")
+                    .exclude(notes__isnull=True)
+                    .exclude(notes__exact="")
+                )
+                accepted_notes = " ".join(oc.notes for oc in notes_qs)
+                combined_text = f"{ch.description} {accepted_notes}"
+                corpus.append(preprocess(combined_text))
             description_processed = preprocess(description)
 
 
