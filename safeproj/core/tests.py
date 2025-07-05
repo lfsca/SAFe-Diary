@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 from unittest.mock import patch
 
 from .forms import RegisterForm
-from .models import SAFeChallenges, Ocurrence, Solution, StatusChoices
+from .models import SAFeChallenges, Ocurrence, Solution, SolutionEvaluation, StatusChoices
 from .services import StatusTransitionService
+from django.contrib.messages import get_messages
 
 
 class RegisterFormTests(TestCase):
@@ -99,3 +100,47 @@ class ViewTests(TestCase):
         })
         self.assertEqual(resp.status_code, 302)
         self.assertTrue(Solution.objects.filter(author=self.user, challenge=self.challenge).exists())
+        
+        
+class EvaluateSolutionTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='user', password='pwd')
+        self.challenge = SAFeChallenges.objects.create(title='Desafio 1', description='Desc')
+        self.solution = Solution.objects.create(
+            challenge=self.challenge,
+            author=self.user,
+            description='Solução exemplo',
+            status=StatusChoices.ACCEPTED
+        )
+        self.url = reverse('evaluate_solution') + f'?solution_id={self.solution.id}'
+
+    def test_get_evaluation_form(self):
+        self.client.login(username='user', password='pwd')
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context)
+        self.assertEqual(response.context['solution'], self.solution)
+
+    def test_post_valid_evaluation_creates_object(self):
+        self.client.login(username='user', password='pwd')
+        response = self.client.post(self.url, {
+            'rating': 5,
+            'explanation': 'Muito útil!',
+        }, follow=True)
+
+        self.assertRedirects(response, reverse('challenges'))
+        self.assertTrue(SolutionEvaluation.objects.filter(user=self.user, solution=self.solution).exists())
+
+        # Verifica se a mensagem de sucesso foi exibida
+        messages = list(get_messages(response.wsgi_request))
+        self.assertIn("Avaliação registrada!", [msg.message for msg in messages])
+
+    def test_reject_evaluation_for_non_accepted_solution(self):
+        self.solution.status = StatusChoices.PENDING
+        self.solution.save()
+
+        self.client.login(username='user', password='pwd')
+        url = reverse('evaluate_solution') + f'?solution_id={self.solution.id}'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)  # get_object_or_404 deve impedir acesso
