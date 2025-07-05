@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Ocurrence, SAFeChallenges, Solution
+from .models import Ocurrence, SAFeChallenges, Solution, SolutionEvaluation
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(label="Senha", widget=forms.PasswordInput)
@@ -54,4 +54,18 @@ class SolutionForm(forms.ModelForm):
         }
         labels = {
             'description': 'Solution',
+        }
+
+
+class SolutionEvaluationForm(forms.ModelForm):
+    class Meta:
+        model = SolutionEvaluation
+        fields = ['rating', 'explanation']
+        widgets = {
+            'rating': forms.NumberInput(attrs={'min': 1, 'max': 5, 'class': 'form-control'}),
+            'explanation': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
+        labels = {
+            'rating': 'Nota (1-5)',
+            'explanation': 'Explicação',
         }
