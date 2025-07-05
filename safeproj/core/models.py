@@ -35,3 +35,17 @@ class Solution(models.Model):
 
     def __str__(self):
         return f"Solução por {self.author.username} para {self.challenge}"
+
+
+class SolutionEvaluation(models.Model):
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE, related_name="evaluations")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField()
+    explanation = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("solution", "user")
+
+    def __str__(self):
+        return f"{self.user.username} avaliou {self.solution} com {self.rating}"

@@ -48,6 +48,7 @@
                   <div class="mb-2">
                     <p class="mb-0"><strong>{{ sol.author.username }}</strong>:</p>
                     <p>{{ sol.description }}</p>
+                    <a class="btn btn-sm btn-outline-primary" href="{% url 'evaluate_solution' %}?solution_id={{ sol.id }}">Evaluate</a>
                   </div>
                 {% endfor %}
               {% else %}

@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm, SolutionForm
-from .models import Ocurrence, SAFeChallenges, Solution, StatusChoices
+from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm, SolutionForm, SolutionEvaluationForm
+from .models import Ocurrence, SAFeChallenges, Solution, SolutionEvaluation, StatusChoices
 from .services import ChallengeMatcher, StatusTransitionService
 
 
@@ -141,6 +141,29 @@ def suggest_solution(request):
     return render(request, "suggest_solution.html", {
         "form": form,
         "challenge": challenge,
+    })
+
+
+@login_required
+def evaluate_solution(request):
+    solution_id = request.GET.get("solution_id")
+    solution = get_object_or_404(Solution, id=solution_id, status=StatusChoices.ACCEPTED)
+
+    if request.method == "POST":
+        form = SolutionEvaluationForm(request.POST)
+        if form.is_valid():
+            evaluation = form.save(commit=False)
+            evaluation.user = request.user
+            evaluation.solution = solution
+            evaluation.save()
+            messages.success(request, "Avaliação registrada!")
+            return redirect("challenges")
+    else:
+        form = SolutionEvaluationForm()
+
+    return render(request, "evaluate_solution.html", {
+        "form": form,
+        "solution": solution,
     })
 
 

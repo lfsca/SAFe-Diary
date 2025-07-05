@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import logout_view, challenges_view, home, register, mapa, register_challenge, create_challenge, register_ocurrence, nlp_redirect, suggest_solution, manage
+from .views import logout_view, challenges_view, home, register, mapa, register_challenge, create_challenge, register_ocurrence, nlp_redirect, suggest_solution, evaluate_solution, manage
 from django.contrib.auth import views as authviews
 
 
@@ -15,5 +15,6 @@ urlpatterns = [
     path('register_ocurrence/', register_ocurrence, name='register_ocurrence'),
     path('search/', nlp_redirect, name='nlp_redirect'),
     path('suggest_solution/', suggest_solution, name='suggest_solution'),
+    path('evaluate_solution/', evaluate_solution, name='evaluate_solution'),
     path('manage/', manage, name='manage'),
 ]
