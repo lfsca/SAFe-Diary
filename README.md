@@ -83,7 +83,7 @@ O projeto segue a estrutura típica de um aplicativo Django modular:
 
 		
 	from django.contrib.auth.models import User
-	User.objects.create_user(username='carla', password='123', is_staff=True)
+	User.objects.create_user(username='Clarisse', password='123', is_staff=True)
 
 
 (Opcional) Executar testes automatizados:
