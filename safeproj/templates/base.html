@@ -44,6 +44,7 @@
         <a href="/search">Describe Your Problem</a>
         {% if request.user.is_staff %}
           <a href="{% url 'manage' %}">Manage</a>
+          <a href="{% url 'create_challenge' %}">Add Challenge</a>
         {% endif %}
       {% else %}
         <a href="/register">Register</a>

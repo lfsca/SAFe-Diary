@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required
 
 from .forms import OcurrenceForm, RegisterForm, SAFeChallengesForm, SolutionForm
 from .models import Ocurrence, SAFeChallenges, Solution, StatusChoices
@@ -41,6 +42,23 @@ def register_challenge(request):
     else:
         form = SAFeChallengesForm()
     return render(request, 'register_challenge.html', {'form': form})
+
+
+@login_required
+def create_challenge(request):
+    if not request.user.is_staff:
+        return redirect('login')
+
+    if request.method == 'POST':
+        form = SAFeChallengesForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Challenge created successfully.')
+            return redirect('create_challenge')
+    else:
+        form = SAFeChallengesForm()
+
+    return render(request, 'create_challenge.html', {'form': form})
 def challenges_view(request):
     challenges = SAFeChallenges.objects.all()
 
