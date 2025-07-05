@@ -81,9 +81,9 @@ O projeto segue a estrutura típica de um aplicativo Django modular:
 	```bash
 	python manage.py shell
 
-		```bash
-		from django.contrib.auth.models import User
-		User.objects.create_user(username='carla', password='123', is_staff=True)
+		
+	from django.contrib.auth.models import User
+	User.objects.create_user(username='carla', password='123', is_staff=True)
 
 
 (Opcional) Executar testes automatizados:
