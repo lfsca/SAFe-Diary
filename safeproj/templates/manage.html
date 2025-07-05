@@ -29,7 +29,7 @@
           <select id="challenge-select" name="challenge" class="form-select text-center">
             <option value="" selected disabled>Select Challenge</option>
             {% for ch in challenges %}
-              <option value="{{ ch.id }}" {% if ch.id|stringformat:'s' == selected_challenge %}selected{% endif %}>{{ ch.get_title_display }}</option>
+              <option value="{{ ch.id }}" {% if ch.id|stringformat:'s' == selected_challenge %}selected{% endif %}>{{ ch.title }}</option>
             {% endfor %}
           </select>
         </div>
@@ -51,7 +51,7 @@
         {% for it in items %}
           <div class="card-ocurrence manage-card" style="max-width: 85%; margin-left: auto; margin-right: auto;" data-id="{{ it.id }}" data-description="{% if selected_type == 'solution' %}{{ it.description|escapejs }}{% else %}{{ it.notes|escapejs }}{% endif %}"
 data-author="{% if selected_type == 'solution' %}{{ it.author.username }}{% else %}{{ it.user.username }}{% endif %}"
- data-challenge="{{ it.challenge.get_title_display }}" data-status="{{ it.get_status_display }}">
+ data-challenge="{{ it.challenge.title }}" data-status="{{ it.get_status_display }}">
             <h6>{{ selected_type|title }} #{{ it.id }}</h6>
             <p class="text-truncate mb-0">
               {% if selected_type == "solution" %}

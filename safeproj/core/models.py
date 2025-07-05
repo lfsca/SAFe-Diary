@@ -7,21 +7,13 @@ class StatusChoices(models.TextChoices):
     ACCEPTED = "accepted", "Accepted"
     REJECTED = "rejected", "Rejected"
 
-
-class ChallengeTitle(models.TextChoices):
-    PLANNING = "planning", "Planning"
-    RESISTENCE = "resistence", "Resistence to Change"
-    COMPLEXITY = "complexity", "Framework Complexity"
-    COMMUNICATION = "communication", "Communication"
-    OTHER = "other", "Other"
-
 class SAFeChallenges(models.Model):
-    title = models.CharField(max_length=30, choices=ChallengeTitle.choices)
+    title = models.CharField(max_length=100)
     description = models.TextField()
     created_in = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.get_title_display()} - {self.created_in.strftime('%d/%m/%Y')}"
+        return f"{self.title} - {self.created_in.strftime('%d/%m/%Y')}"
 
 class Ocurrence(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

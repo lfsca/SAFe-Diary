@@ -24,7 +24,7 @@ class SAFeChallengesForm(forms.ModelForm):
         model = SAFeChallenges
         fields = ['title', 'description']
         widgets = {
-            'title': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }
         labels = {
