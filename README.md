@@ -62,23 +62,30 @@ venv\Scripts\activate     # Windows
 
 3. Instale as dependências:
 
+```bash
 pip install -r requirements.txt
 
 4. Aplique as migrações:
 
+```bash
 python manage.py migrate
 
 5. Execute o servidor:
 
+```bash
 python manage.py runserver
 
 6. Criar Usuário Administrador (Importante para testar todas as funcionalidades):
 
+```bash
 python manage.py shell
+
+```bash
 from django.contrib.auth.models import User
 User.objects.create_user(username='carla', password='123', is_staff=True)
 
 
 (Opcional) Executar testes automatizados:
 
+```bash
 python manage.py test
