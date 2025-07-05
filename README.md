@@ -56,36 +56,37 @@ O projeto segue a estrutura típica de um aplicativo Django modular:
 
 2. Crie um ambiente virtual:
 
-python -m venv venv
-source venv/bin/activate  # Linux/macOS
-venv\Scripts\activate     # Windows
+	```bash
+	python -m venv venv
+	source venv/bin/activate  # Linux/macOS
+	venv\Scripts\activate     # Windows
 
 3. Instale as dependências:
 
-```bash
-pip install -r requirements.txt
+	```bash
+	pip install -r requirements.txt
 
 4. Aplique as migrações:
 
-```bash
-python manage.py migrate
+	```bash
+	python manage.py migrate
 
 5. Execute o servidor:
 
-```bash
-python manage.py runserver
+	```bash
+	python manage.py runserver
 
 6. Criar Usuário Administrador (Importante para testar todas as funcionalidades):
 
-```bash
-python manage.py shell
+	```bash
+	python manage.py shell
 
-```bash
-from django.contrib.auth.models import User
-User.objects.create_user(username='carla', password='123', is_staff=True)
+		```bash
+		from django.contrib.auth.models import User
+		User.objects.create_user(username='carla', password='123', is_staff=True)
 
 
 (Opcional) Executar testes automatizados:
 
-```bash
-python manage.py test
+	```bash
+	python manage.py test
