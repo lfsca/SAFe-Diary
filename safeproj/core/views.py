@@ -54,7 +54,7 @@ def create_challenge(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Challenge created successfully.')
-            return redirect('create_challenge')
+            return redirect('challenges')
     else:
         form = SAFeChallengesForm()
 
