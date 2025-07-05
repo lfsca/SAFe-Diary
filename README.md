@@ -1,25 +1,84 @@
-# GitHub Codespaces ♥️ Django
+# SAFe Diary
 
-Welcome to your shiny new Codespace running Django! We've got everything fired up and running for you to explore Django.
+Este projeto é uma aplicação web desenvolvida com Django, voltada para o registro, análise e colaboração em torno dos desafios enfrentados na adoção do framework SAFe (Scaled Agile Framework) em grandes organizações.
 
-You've got a blank canvas to work on from a git perspective as well. There's a single initial commit with what you're seeing right now - where you go from here is up to you!
+## Funcionalidades
 
-Everything you do here is contained within this one codespace. There is no repository on GitHub yet. If and when you’re ready you can click "Publish Branch" and we’ll create your repository and push up your project. If you were just exploring then and have no further need for this code then you can simply delete your codespace and it's gone forever.
+- Cadastro e autenticação de usuários
+- Registro de desafios relacionados à implementação do SAFe
+- Submissão de ocorrências reais vinculadas a desafios
+- Propostas de soluções por parte da comunidade
+- Avaliação colaborativa das soluções sugeridas
+- Busca inteligente por desafio via NLP (processamento de linguagem natural)
 
-## installing dependancies
+## Estrutura do Projeto
 
-```python
+O projeto segue a estrutura típica de um aplicativo Django modular:
+
+### Principais Arquivos e Diretórios
+
+- `safeproj/core/models.py`  
+  Contém os modelos de domínio: `SAFeChallenges`, `Ocurrence`, `Solution`, `SolutionEvaluation` e o enumerador `StatusChoices`.
+
+- `safeproj/core/forms.py`  
+  Centraliza os formulários utilizados nas views.
+
+- `safeproj/core/services.py`  
+  Implementa regras de negócio reutilizáveis.
+
+- `safeproj/core/views.py`  
+  Define as views que lidam com requisições, autenticação, renderização de templates e integração com os serviços.
+
+- `safeproj/core/tests.py`  
+  Contém testes automatizados para formulários, serviços e views usando `TestCase` e `Client`.
+
+- `safeproj/templates/`  
+  Armazena os templates HTML usados nas páginas da aplicação.
+
+- `safeproj/static/`  
+  Contém os arquivos estáticos como CSS e JS.
+
+- `safeproj/urls.py`  
+  Roteamento principal do projeto.
+
+- safe_filled_data.sql contém dados simulados de usuários, desafios, ocorrências, soluções e avaliações, prontos para popular o banco de dados.
+
+- `manage.py`  
+  Script utilitário para comandos administrativos do Django.
+
+## Instalação
+
+1. Clone o repositório:
+
+   ```bash
+   git clone git@github.com:lfsca/SAFe-Diary.git
+   cd safeproj
+
+2. Crie um ambiente virtual:
+
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+
+3. Instale as dependências:
+
 pip install -r requirements.txt
-```
 
-## To collect static files:
+4. Aplique as migrações:
 
-```python
-python manage.py collectstatic
-```
+python manage.py migrate
 
-## To run this application:
+5. Execute o servidor:
 
-```python
 python manage.py runserver
-```
+
+6. Criar Usuário Administrador (Importante para testar todas as funcionalidades):
+
+python manage.py shell
+from django.contrib.auth.models import User
+User.objects.create_user(username='carla', password='123', is_staff=True)
+
+
+(Opcional) Executar testes automatizados:
+
+python manage.py test
